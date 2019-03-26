@@ -25,7 +25,7 @@ def datawriter(savefile, savedata):
 def do_analysis(inputfile):
     # Import data from file
     dataframe = pandas.read_csv(inputfile)
-    outputfile = "C:/Users/daves/Desktop/Test Stage/New/" + inputfile[-12:-4] + "_clustersort.csv"
+    outputfile = "C:/Users/daves/Desktop/Test Stage/New/R2/" + inputfile[-12:-4] + "_clustersort.csv"
     # Setup data export
     headers(outputfile)
     # Cycle fish images and generate coordinate list
@@ -47,7 +47,7 @@ def do_analysis(inputfile):
 
 
 
-for root, dirs, files in os.walk("C:\\Users\\daves\\Desktop\\Test Stage\\Clustering\\Leica\\"):
+for root, dirs, files in os.walk("C:\\Users\\daves\\Desktop\\Test Stage\\Clustering\\Hermes\\New\\"):
     for f in files:
         do_analysis(os.path.normpath(os.path.join(root, f)))
         print("Completed file:")

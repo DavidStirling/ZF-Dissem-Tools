@@ -29,7 +29,7 @@ def gridtest(inputarray):
     positivecount = 0
     totalcount = 0
 
-    arraylist = np.array_split(inputarray, splitfactory,0)
+    arraylist = np.array_split(inputarray, splitfactory, 0)
     arraycatcher = []
     for array in arraylist:
         subarrays = np.array_split(array, splitfactorx, 1)
@@ -62,7 +62,7 @@ def datawriter(savefile, savedata):
 def do_analysis(inputfile):
     # Import data from file
     dataframe = pandas.read_csv(inputfile)
-    outputfile = "C:/Users/daves/Desktop/Test Stage/New/" + inputfile[-12:-4] + "_testing.csv"
+    outputfile = "C:/Users/daves/Desktop/Test Stage/New/R2/" + inputfile[-12:-4] + "_testing.csv"
     # Setup data export
     headers(outputfile)
     # Cycle fish images and generate coordinate list
@@ -85,13 +85,18 @@ def findconvexhull(coords):
     # Add coords to array
     if len(coords) > 2:
         test = np.array(coords)
-        hull = ConvexHull(test)
-        # Restrict test points to those around the hull to minimise work.
-        candidates = test[hull.vertices]
-        dist_mat = distance_matrix(candidates, candidates)
-        i, j = np.unravel_index(dist_mat.argmax(), dist_mat.shape)
-        maxdist = distance.euclidean(candidates[i], candidates[j])
-        return hull.area, maxdist
+        try:
+            hull = ConvexHull(test)
+            arearesult = hull.area
+            # Restrict test points to those around the hull to minimise work.
+            candidates = test[hull.vertices]
+            dist_mat = distance_matrix(candidates, candidates)
+            i, j = np.unravel_index(dist_mat.argmax(), dist_mat.shape)
+            maxdist = distance.euclidean(candidates[i], candidates[j])
+        except:
+            arearesult = "2D only"
+            maxdist = "Undefined"
+        return arearesult, maxdist
     elif len(coords) == 2:
         test = np.array(coords)
         maxdist = distance.euclidean(test[0], test[1])
@@ -99,6 +104,20 @@ def findconvexhull(coords):
     else:
         return "Insufficient points", "Insufficient Points"
 
+def sumdistances(coords):
+    from math import hypot
+    if len(coords) > 2:
+    def distance(p1, p2):
+        """Euclidean distance between two points."""
+        x1, y1 = p1
+        x2, y2 = p2
+        return hypot(x2 - x1, y2 - y1)
+
+    from itertools import combinations
+
+    list_of_coords = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12)]
+
+    [distance(*combo) for combo in combinations(list_of_coords, 2)]
 
 # Set initial parameters
 #imxdim = 1392
@@ -113,7 +132,7 @@ splitfactory = int(imydim/numpixels)
 splitfactorx = int(imxdim/numpixels)
 # Split does y first
 
-for root, dirs, files in os.walk("C:\\Users\\daves\\Desktop\\Test Stage\\Clustering\\Hermes\\"):
+for root, dirs, files in os.walk("C:\\Users\\daves\\Desktop\\Test Stage\\Clustering\\Hermes\\New\\"):
     for f in files:
         do_analysis(os.path.normpath(os.path.join(root,f)))
         print("Completed file:")
